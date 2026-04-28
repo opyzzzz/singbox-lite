@@ -6,7 +6,7 @@ export DEFAULT_SNI="www.amd.com"
 SELF_SCRIPT_PATH="$(readlink -f "$0")"
 SCRIPT_DIR="$(dirname "$SELF_SCRIPT_PATH")"
 SINGBOX_DIR="/usr/local/etc/sing-box"
-GITHUB_RAW_BASE="https://ghp.ci/https://raw.githubusercontent.com/0xdabiaoge/singbox-lite/main"
+GITHUB_RAW_BASE="https://mirror.ghproxy.com/https://raw.githubusercontent.com/0xdabiaoge/singbox-lite/main"
 SCRIPT_UPDATE_URL="${GITHUB_RAW_BASE}/singbox.sh"
 
 # 注入 sing-box 1.12+ 废弃配置兼容环境变量 (用于脚本内嵌的前台命令调用，如 check/generate)
@@ -288,7 +288,7 @@ _install_yq() {
         _info "安装 yq..."
         local arch=$(uname -m)
         case $arch in x86_64|amd64) arch='amd64' ;; aarch64|arm64) arch='arm64' ;; *) arch='amd64' ;; esac
-        wget -qO "$YQ_BINARY" "https://ghp.ci/https://github.com/mikefarah/yq/releases/latest/download/yq_linux_$arch"
+        wget -qO "$YQ_BINARY" "https://mirror.ghproxy.com/https://github.com/mikefarah/yq/releases/latest/download/yq_linux_$arch"
         chmod +x "$YQ_BINARY"
     fi
 }
@@ -410,7 +410,7 @@ _install_sing_box() {
         libc_suffix="-musl"
     fi
     
-    local api_url="https://ghp.ci/https://api.github.com/repos/SagerNet/sing-box/releases/latest"
+    local api_url="https://api.github.com/repos/SagerNet/sing-box/releases/latest"
     local search_pattern="linux-${arch_tag}${libc_suffix}.tar.gz"
     local release_info=$(curl -s "$api_url")
     local download_url=$(echo "$release_info" | jq -r ".assets[] | select(.name | contains(\"${search_pattern}\")) | .browser_download_url" | head -1)
@@ -475,7 +475,7 @@ _install_cloudflared() {
         *) _error "不支持的架构：$arch"; return 1 ;;
     esac
     
-    local download_url="https://ghp.ci/https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-${arch_tag}"
+    local download_url="https://mirror.ghproxy.com/https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-${arch_tag}"
     
     wget -qO "${CLOUDFLARED_BIN}" "$download_url" || { _error "cloudflared 下载失败!"; return 1; }
     chmod +x "${CLOUDFLARED_BIN}"
@@ -4097,7 +4097,7 @@ _do_update_xray() {
         *)             xray_arch="64" ;;
     esac
     
-    local download_url="https://ghp.ci/https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-${xray_arch}.zip"
+    local download_url="https://mirror.ghproxy.com/https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-${xray_arch}.zip"
     local tmp_dir=$(mktemp -d)
     local tmp_zip="${tmp_dir}/xray.zip"
     
